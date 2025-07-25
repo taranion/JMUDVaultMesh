@@ -17,7 +17,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build 
+        run: mvn clean compile
+      - name: Test 
         env:
             TEST_API_KEY: ${secrets.TEST_API_KEY}}
             TEST_MUDNAME: ${secrets.TEST_MUDNAME}}
-        run: mvn clean package
+        run: mvn package
