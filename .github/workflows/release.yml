@@ -20,16 +20,20 @@ jobs:
             TEST_API_KEY: ${{secrets.TEST_API_KEY}}
             TEST_MUDNAME: ${{secrets.TEST_MUDNAME}}
         run: mvn package
+      - name: Get Maven project version
+        id: project_version
+        run: |
+            VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+            echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+            echo "Project version: $VERSION"
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: ncipollo/release-action@v1
         with:
-            tag_name: ${{ github.ref_name }}
-            name: "Release ${{ steps.extract_version.outputs.VERSION }}"
-        files: |
-            target/*.jar
-            generate_release_notes: true
-            draft: false
-            prerelease: false
-            allowUpdates
+            allowUpdates: true
+            artifacts: target/*.jar
+            generateReleaseNotes: true
+            name: "${{ steps.extract_version.outputs.VERSION }}"
+            replacesArtifacts: true
+            tag: ${{ github.ref_name }}
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
