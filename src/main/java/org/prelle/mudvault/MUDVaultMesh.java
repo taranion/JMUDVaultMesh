@@ -48,6 +48,8 @@ public class MUDVaultMesh extends WebSocketClient {
 		super(new URI("ws://"+config.getMeshServer()+":"+config.getWebsocketPort()), Map.of("User-Agent",config.getUserAgent()));
 		this.mudName = config.getMudName();
 		this.apiKey  = config.getApiKey();
+		Objects.requireNonNull(mudName, "mudName not configured");
+		Objects.requireNonNull(apiKey, "apiKey not configured");
 		this.config  = config;
 		this.callback= callback;
 		gson = new Gson();
