@@ -38,6 +38,8 @@ public class ConnectTest {
 	public void test() throws URISyntaxException {
 		assertNotNull("TEST_API_KEY not set", apiKey);
 		assertNotNull("TEST_MUDNAME not set", mudName);
+		System.out.println("Use "+apiKey.length()+" long key "+apiKey);
+		System.out.println("Env "+System.getenv().toString());
 		VaultMeshConfig config = VaultMeshConfig.builder()
 				.mudName(mudName)
 				.apiKey(apiKey)
