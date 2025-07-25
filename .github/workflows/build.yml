@@ -21,5 +21,5 @@ jobs:
       - name: Test 
         env:
             TEST_API_KEY: ${secrets.TEST_API_KEY}}
-            TEST_MUDNAME: ${secrets.TEST_MUDNAME}}
+            TEST_MUDNAME: ${{secrets.TEST_MUDNAME}}
         run: mvn package
