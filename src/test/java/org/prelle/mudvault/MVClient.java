@@ -23,39 +23,41 @@ public class MVClient {
 				.build();
 		
 		MUDVaultListener callback = new MUDVaultListener() {
-			
 			@Override
 			public void meshStateChanged(MeshConnectionState state) {
-				// TODO Auto-generated method stub
-				
 			}
-			
 			@Override
 			public void meshReceivedWhoList(String fromMUD, List<PlayerInfo> users) {
-				// TODO Auto-generated method stub
-				
+				System.out.println("Received Who list");
+				users.forEach(user -> System.out.println(user));
 			}
-			
 			@Override
 			public List<PlayerInfo> meshOnWho(String mud, String player) {
-				// TODO Auto-generated method stub
 				return null;
 			}
-			
 			@Override
 			public void meshOnTell(String fromMud, String fromPlayer, String toPlayer, String message) {
-				// TODO Auto-generated method stub
-				
 			}
-			
 			@Override
 			public void meshOnChannelMessage(String fromMud, String fromPlayer, String channel, String message) {
-				// TODO Auto-generated method stub
-				
+			}
+			public void meshReceivedFingerReply(String fromMUD, String fromUser, String toUser, String info) {}
+			public String meshOnFinger(String fromMud, String fromPlayer, String player) {
+				return "Hands off. Stop fingering me";
 			}
 		};
 		
 		MUDVaultMesh client = new MUDVaultMesh(config, callback);
-		client.connect();	}
+		client.connect();
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		client.requestWhoList("Dark Wizardry", "taranion");
+		
+		client.sendOnChannel("gossip", "taranion", "I hope this works");
+	}
 
 }

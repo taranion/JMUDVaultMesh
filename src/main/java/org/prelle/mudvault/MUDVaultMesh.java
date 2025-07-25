@@ -19,6 +19,7 @@ import java.util.UUID;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 import org.prelle.mudvault.Authentication.AuthPayload;
+import org.prelle.mudvault.Channel.ChannelPayload;
 import org.prelle.mudvault.Tell.TellPayload;
 
 import com.google.gson.Gson;
@@ -70,6 +71,10 @@ public class MUDVaultMesh extends WebSocketClient {
 	private void send(MeshMessage mess) {
 		mess.timestamp = Instant.now().toString();
 		mess.version=VERSION;
+		mess.id = UUID.randomUUID();
+		if (mess.metadata==null) {
+			mess.metadata = new Metadata(5,300,null,null);
+		}
         String json = gson.toJson(mess);
         logger.log(Level.INFO, "SND: "+json);
         super.send(json);
@@ -162,6 +167,8 @@ public class MUDVaultMesh extends WebSocketClient {
 		switch (mess.type) {
 		case CHANNEL   -> rcvChannel(gson.fromJson(message,  Channel.class));
 		case ERROR     -> rcvError(gson.fromJson(message, ErrorResponse.class));
+		case FINGER    -> rcvFinger(gson.fromJson(message, Finger.class));
+		case FINGER_REPLY-> rcvFingerReply(gson.fromJson(message, FingerReply.class));
 		case PING      -> send(new Pong());
 		case TELL      -> rcvTell(gson.fromJson(message,  Tell.class));
 		case WHO       -> rcvWho(gson.fromJson(message,  Who.class));
@@ -227,7 +234,7 @@ public class MUDVaultMesh extends WebSocketClient {
 	}
 	
 	//-------------------------------------------------------------------
-	public void requestwhoList(String toMUD, String fromUser) {
+	public void requestWhoList(String toMUD, String fromUser) {
 		Who msg = new Who();
 		msg.to = new MUDUser(toMUD);
 		msg.from = new MUDUser(mudName, fromUser);
@@ -249,6 +256,43 @@ public class MUDVaultMesh extends WebSocketClient {
 		msg.from = new MUDUser(mudName, fromUser);
 		msg.setPayload(new TellPayload(message));
 		send(msg);
+	}
+	
+	//-------------------------------------------------------------------
+	public void sendOnChannel(String channel, String fromUser, String message) {
+		Channel msg = new Channel();
+		msg.to = new MUDUser(null, null, channel);
+		msg.from = new MUDUser(mudName, fromUser);
+		msg.setPayload(new ChannelPayload(message));
+		send(msg);
+	}
+	
+	//-------------------------------------------------------------------
+	public void finger(String toMUD, String toUser, String fromMUD, String fromUser) {
+		Finger msg = new Finger();
+		msg.to = new MUDUser(toMUD, toUser);
+		msg.from = new MUDUser(mudName, fromUser);
+		send(msg);
+	}
+
+	//-------------------------------------------------------------------
+	private void rcvFinger(Finger msg) {
+		logger.log(Level.INFO,"User {0}@{1} fingered our user {2}", msg.from.user(), msg.from.mud(), msg.to.user());
+		if (callback!=null) {
+			String info = callback.meshOnFinger(msg.from.mud(), msg.from.user(), msg.to.user());
+			FingerReply reply = new FingerReply();
+			reply.setPayload(new FingerReply.FingerReplyPayload(msg.to.user(), info));
+			reply.from=new MUDUser(mudName);
+			send(reply);
+		}
+	}
+
+	//-------------------------------------------------------------------
+	private void rcvFingerReply(FingerReply msg) {
+		logger.log(Level.INFO,"MUD {0} returned a finger-reply for {1}", msg.from.mud(), msg.to.user());
+		if (callback!=null) {
+			callback.meshReceivedFingerReply(msg.from.mud(), msg.getPayload().info(), msg.to.user(), msg.getPayload().info());
+		}
 	}
 
 }

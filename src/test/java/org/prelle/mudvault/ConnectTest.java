@@ -19,6 +19,10 @@ public class ConnectTest {
 		public List<PlayerInfo> meshOnWho(String mud, String player) {return null;}
 		public void meshOnTell(String fromMud, String fromPlayer, String toPlayer, String message) {}
 		public void meshOnChannelMessage(String fromMud, String fromPlayer, String channel, String message) {}
+		public void meshReceivedFingerReply(String fromMUD, String fromUser, String toUser, String info) {}
+		public String meshOnFinger(String fromMud, String fromPlayer, String player) {
+			return "Hands off. Stop fingering me";
+		}
 	};
 
 	

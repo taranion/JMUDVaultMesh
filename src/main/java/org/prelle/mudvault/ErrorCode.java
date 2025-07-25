@@ -6,6 +6,7 @@ package org.prelle.mudvault;
 public enum ErrorCode {
 	GENERAL_ERROR(1000),
 	MISSING_MUD_NAME(1001),
+	NOT_FOUND(1003),
 	;
 	
 	int code;
