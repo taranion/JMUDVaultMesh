@@ -1,4 +1,4 @@
-name: Compile and deploy
+name: Release
 
 on:
   # Runs on pushes targeting the default branch
@@ -30,5 +30,6 @@ jobs:
             generate_release_notes: true
             draft: false
             prerelease: false
+            allowUpdates
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
