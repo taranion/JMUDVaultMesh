@@ -1,0 +1,44 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0   https://maven.apache.org/xsd/settings-1.0.0.xsd">
+	<servers>
+		<server>
+            <id>central</id>
+            <username>${env.SONATYPE_USER_TOKEN}</username>
+            <password>${env.SONATYPE_PWD_TOKEN}</password>
+        </server>
+	</servers>
+  <profiles>
+    <profile>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <gpg.keyname>${env.GPG_KEY}</gpg.keyname>
+        <gpg.passphrase>${env.GPG_PWD}</gpg.passphrase>
+      </properties>
+      <repositories>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+      </repositories>
+    </profile>
+    <profile>
+      <id>central-snapshots</id>
+      <repositories>
+        <repository>
+          <id>central.manual.testing</id>
+          <name>Central Testing repository</name>
+          <url>https://central.sonatype.com/api/v1/publisher/deployments/download</url>
+        </repository>
+      </repositories>
+    </profile>
+  </profiles>
+</settings>
