@@ -14,10 +14,13 @@ import lombok.ToString;
 @ToString
 public class PlayerInfo {
 
-	private String name;
+	private String username;
+	private String displayName;
 	private String title;
-	private Integer level;
+	private String level;
 	@SerializedName("class")
 	private String clazz;
+	private String location;
 	private Integer idle;
+	private String realName;
 }

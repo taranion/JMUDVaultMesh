@@ -8,12 +8,12 @@ import lombok.Setter;
  */
 public class Tell extends MeshMessage {
 	
-	public static record TellPayload(String message) {
+	public static record TellPayload(String message, String formatted) {
 	}
 	
 	@Getter
 	@Setter
-	private TellPayload payload = new TellPayload(null);
+	private TellPayload payload = new TellPayload(null,null);
 
 	//-------------------------------------------------------------------
 	public Tell() {

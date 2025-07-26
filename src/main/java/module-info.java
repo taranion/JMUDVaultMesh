@@ -5,4 +5,6 @@ module org.prelle.mudvault {
 	requires lombok;
 	requires org.java_websocket;
 	requires com.google.gson;
+	
+	opens org.prelle.mudvault;
 }

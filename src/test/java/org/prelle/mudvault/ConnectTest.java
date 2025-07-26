@@ -15,13 +15,16 @@ public class ConnectTest {
 		public void meshStateChanged(MeshConnectionState state) {
 			ConnectTest.state = state;
 		}
-		public void meshReceivedWhoList(String fromMUD, List<PlayerInfo> users) {}
-		public List<PlayerInfo> meshOnWho(String mud, String player) {return null;}
+		public void meshReceivedWhoList(String fromMUD, PlayerInfo[] users) {}
+		public PlayerInfo[] meshOnWho(String mud, String player) {return null;}
 		public void meshOnTell(String fromMud, String fromPlayer, String toPlayer, String message) {}
 		public void meshOnChannelMessage(String fromMud, String fromPlayer, String channel, String message) {}
 		public void meshReceivedFingerReply(String fromMUD, String fromUser, String toUser, String info) {}
-		public String meshOnFinger(String fromMud, String fromPlayer, String player) {
-			return "Hands off. Stop fingering me";
+		public PlayerInfo meshOnFinger(String fromMud, String fromPlayer, String player) {
+			PlayerInfo info = new PlayerInfo();
+			info.setUsername(player);
+			info.setTitle("Hands off. Stop fingering me");
+			return info;
 		}
 	};
 

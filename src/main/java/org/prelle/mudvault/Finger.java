@@ -8,12 +8,12 @@ import lombok.Setter;
  */
 public class Finger extends MeshMessage {
 	
-	public static record FingerPayload() {
+	public static record FingerPayload(String user, boolean request, PlayerInfo info) {
 	}
 	
 	@Getter
 	@Setter
-	private FingerPayload payload = new FingerPayload();
+	private FingerPayload payload;
 
 	//-------------------------------------------------------------------
 	public Finger() {

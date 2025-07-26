@@ -27,13 +27,17 @@ public class MVClient {
 			public void meshStateChanged(MeshConnectionState state) {
 			}
 			@Override
-			public void meshReceivedWhoList(String fromMUD, List<PlayerInfo> users) {
+			public void meshReceivedWhoList(String fromMUD, PlayerInfo[] users) {
 				System.out.println("Received Who list");
-				users.forEach(user -> System.out.println(user));
+//				users.forEach(user -> System.out.println(user));
 			}
 			@Override
-			public List<PlayerInfo> meshOnWho(String mud, String player) {
-				return null;
+			public PlayerInfo[] meshOnWho(String mud, String player) {
+				PlayerInfo player1 = new PlayerInfo();
+				player1.setUsername("testuser");
+				player1.setDisplayName("Test User");
+				player1.setLocation("Doesn't exist");
+				return new PlayerInfo[] {player1};
 			}
 			@Override
 			public void meshOnTell(String fromMud, String fromPlayer, String toPlayer, String message) {
@@ -42,8 +46,11 @@ public class MVClient {
 			public void meshOnChannelMessage(String fromMud, String fromPlayer, String channel, String message) {
 			}
 			public void meshReceivedFingerReply(String fromMUD, String fromUser, String toUser, String info) {}
-			public String meshOnFinger(String fromMud, String fromPlayer, String player) {
-				return "Hands off. Stop fingering me";
+			public PlayerInfo meshOnFinger(String fromMud, String fromPlayer, String player) {
+				PlayerInfo info = new PlayerInfo();
+				info.setUsername(player);
+				info.setTitle("Hands off. Stop fingering me");
+				return info;
 			}
 		};
 		
@@ -55,9 +62,24 @@ public class MVClient {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		client.requestWhoList("Dark Wizardry", "taranion");
-		
-		client.sendOnChannel("gossip", "taranion", "I hope this works");
+		//client.requestWhoList("Gateway", "taranion");
+		client.requestMUDs();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		//client.joinChannel("gossip");
+		client.sendOnChannel("ooc", "GithubAction", "Unit Test");
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Exit now");
 	}
 
 }

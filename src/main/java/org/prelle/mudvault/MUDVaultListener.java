@@ -9,7 +9,7 @@ public interface MUDVaultListener {
 	
 	public void meshStateChanged(MeshConnectionState state);
 	
-	public void meshReceivedWhoList(String fromMUD, List<PlayerInfo> users);
+	public void meshReceivedWhoList(String fromMUD, PlayerInfo[] users);
 	
 	public void meshReceivedFingerReply(String fromMUD, String fromUser, String toUser, String info);
 
@@ -17,8 +17,8 @@ public interface MUDVaultListener {
 
 	public void meshOnChannelMessage(String fromMud, String fromPlayer, String channel, String message);
 	
-	public List<PlayerInfo> meshOnWho(String mud, String player);
+	public PlayerInfo[] meshOnWho(String mud, String player);
 	
-	public String meshOnFinger(String fromMud, String fromPlayer, String player);
+	public PlayerInfo meshOnFinger(String fromMud, String fromPlayer, String player);
 	
 }
